@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import "antd/dist/antd.css";
 import Head from "next/head";
-
+import wrapper from "../store/configureStore";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const NodeBird = ({ Component }) => {
     return (
@@ -12,7 +14,7 @@ const NodeBird = ({ Component }) => {
                 <title>NodeBird</title>
             </Head>
             <Component />
-        </> 
+        </>
     );
 };
 
@@ -21,4 +23,4 @@ NodeBird.propTypes = {
 };
 
 
-export default NodeBird;
+export default wrapper.withRedux(NodeBird);

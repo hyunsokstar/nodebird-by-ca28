@@ -4,18 +4,21 @@ import Link from "next/link";
 import { Input, Menu, Row, Col } from "antd";
 import LoginForm from "./LoginForm";
 import UserProfile from "./UserProfile";
+import { useSelector } from "react-redux";
 
-const dummy = {
-  nickname: "제로초",
-  Post: [],
-  Followings: [],
-  Followers: [],
-  isLoggedIn: false,
-};
+// const dummy = {
+//   nickname: "제로초",
+//   Post: [],
+//   Followings: [],
+//   Followers: [],
+//   isLoggedIn: false,
+// };
 
 const AppLayout = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log("isLoggedIn : ", isLoggedIn);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // console.log("isLoggedIn : ", isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  // console.log("isLoggedIn : ", isLoggedIn);
 
   return (
     <div>
@@ -36,13 +39,14 @@ const AppLayout = ({ children }) => {
 
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? (
+          {/* {isLoggedIn ? (
             <UserProfile setIsLoggedIn={setIsLoggedIn} />
           ) : (
             <LoginForm setIsLoggedIn={setIsLoggedIn} />
-          )}
+          )} */}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} style={{ padding: "0 40px", border: "1px solid lightgray" }}>
           {children}
         </Col>
         <Col xs={24} md={6}>

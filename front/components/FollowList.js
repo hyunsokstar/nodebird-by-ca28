@@ -8,7 +8,7 @@ const FollowList = ({ header, data }) => {
 
     return (
         <List
-            style={{ marginBttom: 20 }}
+            style={{ marginBttom: 20, paddingTop:"0px", paddingBottom:"5px" }}
             grid={{ gutter: 4, xs: 2, md: 3 }}
             size="small"
             header={<div>{header}</div>}
