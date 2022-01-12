@@ -27,7 +27,7 @@ export const MultiImagesWrapper1 = styled.div`
     /* background-color: yellow; */
     display: flex;
     justify-content: center;
-    text-align: center;
+    /* text-align: center; */
     
     & input[name="imageInput"] {
         display: none;

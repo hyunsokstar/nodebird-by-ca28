@@ -21,6 +21,13 @@ const MultiImages = ({ images }) => {
         )
     });
 
+    const labels = images.map((image, i )=> {
+        let htmlFor = "tab"+(i+1)
+        return (
+            <label htmlFor={htmlFor}></label>
+        )
+    })
+
     const handleOk = () => {
         setModalText('The modal will be closed after two seconds');
         setConfirmLoading(true);
@@ -38,7 +45,6 @@ const MultiImages = ({ images }) => {
     return (
         <>
             <MainContainerWrapper>
-
                 <MainImagesWrapper>
                     {MultiImagesTags}
                 </MainImagesWrapper>
@@ -71,10 +77,7 @@ const MultiImages = ({ images }) => {
                             </MultiImageWrapper2>
 
                             <LabelBtnWrapper>
-                                <label htmlFor="tab1"></label>
-                                <label htmlFor="tab2"></label>
-                                <label htmlFor="tab3"></label>
-                                <label htmlFor="tab4"></label>
+                                {labels}
                             </LabelBtnWrapper>
                         </MutilImageSlideWrapper>
 

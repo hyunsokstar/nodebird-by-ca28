@@ -1,14 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Modal, Button } from 'antd';
-import { MultiImageWrapper } from "./style/MultiImageStyle"
-import { OneTwoImageButton } from "./style/OneTwoImages"
-import { PostingImageWrapper } from "./style/PostingImageStyle"
+import { PostingImageWrapper, OneTwoImageButton } from "./style/OneTwoImageStyle"
 
 
 const OneTwoImages = ({ images }) => {
-    const [visible, setVisible] = React.useState(false);
-    const [confirmLoading, setConfirmLoading] = React.useState(false);
-    const [modalText, setModalText] = React.useState('Content of the modal');
+    const [visible, setVisible] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [modalText, setModalText] = useState('Content of the modal');
+    const [imageOrder, setImageOrder] =  useState("first");
 
     const showModal = () => {
         setVisible(true);
@@ -30,13 +29,18 @@ const OneTwoImages = ({ images }) => {
         return (
             <div>
                 <PostingImageWrapper>
-                    <OneTwoImageButton>
-                        왼쪽
+                    <OneTwoImageButton onClick={()=> setImageOrder("first")}>
+                        first
                     </OneTwoImageButton>
-                    <OneTwoImageButton>
-                        오른쪽
+                    <OneTwoImageButton onClick={()=> setImageOrder("second")}>
+                        second
                     </OneTwoImageButton>
+                    {imageOrder === "first" ? 
                     <img src={images[0].src} alt="no image" onClick={showModal} style={{ width: "100%", height:"400px"}} />
+                    :
+                    <img src={images[1].src} alt="no image" onClick={showModal} style={{ width: "100%", height:"400px"}} />
+
+                    }
                 </PostingImageWrapper>
             </div>
         )
@@ -62,12 +66,10 @@ const OneTwoImages = ({ images }) => {
         Open Modal with async logic
       </Button> */}
 
-            <MultiImageWrapper>
                 {images.length == 1 ? 
                 OneImageTag()
                 : TwoImageTag()}
                 <br /> <br />
-            </MultiImageWrapper>
 
             <Modal
                 title="Title"
