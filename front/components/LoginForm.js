@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Form, Input, Row, Col } from "antd";
+import { Form, Input, Row, Col , Button} from "antd";
 import Link from "next/link";
 import {
   LoginFormWrapper,
@@ -8,8 +8,8 @@ import {
 } from "./style/LoginFormStyle";
 
 // 추가
-import { useDispatch } from "react-redux";
-import { loginAction } from "../reducers/user";
+import { useDispatch, useSelector } from 'react-redux';
+import { LOG_IN_REQUEST } from '../reducers/user';
 
 // 수정
 // const LoginForm = ({ setIsLoggedIn }) => {
@@ -19,6 +19,8 @@ const LoginForm = () => {
 
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const { logInLoading } = useSelector((state) => state.user);
+
 
   const onChangeId = useCallback((e) => {
     setId(e.target.value);
@@ -32,7 +34,13 @@ const LoginForm = () => {
     console.log("id,password : ", id, password);
     // 수정
     // setIsLoggedIn(true);
-    dispatch(loginAction({ id, password }));
+    // dispatch(loginAction({ id, password }));
+
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { id, password },
+    });
+
   }, [id, password]);
 
   return (
@@ -55,9 +63,9 @@ const LoginForm = () => {
         </div>
         <div>
           <LoginButtonWrapper>
-            <LoginButton type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={logInLoading}>
               로그인
-            </LoginButton>
+            </Button>
             <Link href="/signup">
               <LoginButton type="default">회원 가입</LoginButton>
             </Link>

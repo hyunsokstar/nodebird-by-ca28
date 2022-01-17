@@ -1,4 +1,3 @@
-// imsc
 import styled from 'styled-components';
 
 export const MainContainerWrapper = styled.div`
@@ -32,8 +31,6 @@ export const MultiImagesWrapper1 = styled.div`
     & input[name="imageInput"] {
         display: none;
     }
-
-
 `
 
 export const MultiImageWrapper2 = styled.div`

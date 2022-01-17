@@ -41,7 +41,7 @@ export const initialState = {
         id: 2,
         nickname: "tank",
       },
-      content: "sample 게시글 for Test 2",
+      content: 'sample 게시글 #test',
       Images: [
         {
           src: "https://t4.ftcdn.net/jpg/04/42/24/75/240_F_442247576_8XwSiAl4HxQpBpluRzyI0BFA6DgUNn68.jpg",
@@ -62,7 +62,7 @@ export const initialState = {
 
 const dummyPost = {
   id: 2,
-  content: '추가 게시글 for test',
+  content: 'hello world #posting_test',
   User: {
       id: 1,
       nickname: '제로초',

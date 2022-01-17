@@ -5,6 +5,8 @@ import Head from "next/head";
 import wrapper from "../store/configureStore";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import withReduxSaga from 'next-redux-saga';
+
 
 const NodeBird = ({ Component }) => {
     return (
@@ -23,4 +25,4 @@ NodeBird.propTypes = {
 };
 
 
-export default wrapper.withRedux(NodeBird);
+export default wrapper.withRedux(withReduxSaga(NodeBird));

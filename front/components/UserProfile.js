@@ -3,8 +3,8 @@ import React, { useCallback } from "react";
 import { LogoutButtonWrapper } from "./style/LogOutFormStyle";
 
 // 추가 2
-import { useDispatch } from "react-redux";
-import { logoutAction } from "../reducers/user";
+import { useDispatch, useSelector } from 'react-redux';
+import { LOG_OUT_REQUEST } from '../reducers/user';
 
 const dummy = {
   nickname: "제로초",
@@ -16,12 +16,15 @@ const dummy = {
 const UserProfile = ({ setIsLoggedIn }) => {
   // 추가
   const dispatch = useDispatch();
+  const { me, logOutLoading } = useSelector((state) => state.user);
+
 
   const onLogOut = useCallback(() => {
     // 수정
     // setIsLoggedIn(false);
-    dispatch(logoutAction());
-
+    dispatch({
+      type: LOG_OUT_REQUEST,
+  });
   }, []);
 
   return (
@@ -46,12 +49,12 @@ const UserProfile = ({ setIsLoggedIn }) => {
         ]}
       >
         <Card.Meta
-          avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
-          title={dummy.nickname}
+          avatar={<Avatar>{me.nickname[0]}</Avatar>}
+          title={me.nickname}
         />
       </Card>
       <LogoutButtonWrapper>
-        <Button onClick={onLogOut}>로그아웃</Button>
+        <Button onClick={onLogOut} loading={logOutLoading}>로그아웃</Button>
       </LogoutButtonWrapper>
     </div>
   );
