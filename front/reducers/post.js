@@ -1,45 +1,10 @@
 import shortId from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 
 export const initialState = {
   mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: "tank",
-      },
-      content: "sample 게시글 for Test",
-      Images: [
-        {
-          src: "https://cdn.pixabay.com/photo/2021/12/11/07/59/hotel-6862159__340.jpg",
-        },
-        {
-          src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
-        },
-        // {
-        //   src: "https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg",
-        // },
-        // {
-        //   src: "https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg",
-        // },
-      ],
-
-      Comments: [{
-        User: {
-          nickname: 'nero',
-        },
-        content: '첫번째 더미 댓글 fisrt ',
-      }, {
-        User: {
-          nickname: 'hero',
-        },
-        content: '두번째 더미 댓글 second',
-      }]
-
-    },
-
   ],
 
   removePostLoading: false,
@@ -55,6 +20,31 @@ export const initialState = {
   addCommentError: null,
 
 };
+
+// 게시글 생성(using faker) 함수 
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+  id: shortId.generate(),
+  User: {
+      id: shortId.generate(),
+      nickname: faker.name.findName(),
+  },
+  content: faker.lorem.paragraph(),
+  Images: [{
+      src: faker.image.nature(),
+  }],
+  Commeents: [{
+      User: {
+          id: shortId.generate(),
+          nickname: faker.name.findName(),
+      },
+      content: faker.lorem.sentence(),
+  }],
+}));
+
+// 최초 게시글 10개 설정
+initialState.mainPosts = initialState.mainPosts.concat(
+  generateDummyPost(10)
+)
 
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
@@ -109,7 +99,7 @@ export default (state = initialState, action) => {
         draft.addPostDone = false;
         draft.addPostError = null;
         break;
-    case ADD_POST_SUCCESS:
+      case ADD_POST_SUCCESS:
         // return {
         //     ...state,
         //     mainPosts: [dummyPost(action.data), ...state.mainPosts],
@@ -120,7 +110,7 @@ export default (state = initialState, action) => {
         draft.addPostDone = true;
         draft.mainPosts.unshift(dummyPost(action.data));
         break;
-    case ADD_POST_FAILURE:
+      case ADD_POST_FAILURE:
         // return {
         //     ...state,
         //     addPostLoading: false,
@@ -157,52 +147,52 @@ export default (state = initialState, action) => {
           removePostError: action.error,
         };
 
-        case ADD_COMMENT_REQUEST:
-          // return {
-          //     ...state,
-          //     addCommentLoading: true,
-          //     addCommentDone: false,
-          //     addCommentError: null,
-          // };
-          draft.addCommentLoading = true;
-          draft.addCommentDone = false;
-          draft.addCommentError = null;
-          break;
+      case ADD_COMMENT_REQUEST:
+        // return {
+        //     ...state,
+        //     addCommentLoading: true,
+        //     addCommentDone: false,
+        //     addCommentError: null,
+        // };
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
       case ADD_COMMENT_SUCCESS:
-          // // 사가에서 넘어온 postId를 이용해 원래 게시글 정보 찾기
-          // const postIndex = state.mainPosts.findIndex(
-          //     (v) => v.id === action.data.postId
-          // );
-          // const post = { ...state.mainPosts[postIndex] };
-          // // 원래 댓글 정보 + 새로운 댓글 정보로 댓글 정보 재구성
-          // const Comments = [
-          //     dummyComment(action.data.content),
-          //     ...post.Comments,
-          // ];
-          // // 원래 게시글 정보의 게시글과 댓글 정보를 재구성 
-          // const mainPosts = [...state.mainPosts]
-          // mainPosts[postIndex] = { ...post, Comments };
-          // return {
-          //     ...state,
-          //     mainPosts,
-          //     addCommentLoading: false,
-          //     addCommentDone: true,
-          // };
-          // 댓글이 달릴 포스팅 객체 찾기
-          const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-          post.Comments.unshift(dummyComment(action.data.content));
-          draft.addCommentLoading = false;
-          draft.addCommentDone = true;
-          break;                
+        // // 사가에서 넘어온 postId를 이용해 원래 게시글 정보 찾기
+        // const postIndex = state.mainPosts.findIndex(
+        //     (v) => v.id === action.data.postId
+        // );
+        // const post = { ...state.mainPosts[postIndex] };
+        // // 원래 댓글 정보 + 새로운 댓글 정보로 댓글 정보 재구성
+        // const Comments = [
+        //     dummyComment(action.data.content),
+        //     ...post.Comments,
+        // ];
+        // // 원래 게시글 정보의 게시글과 댓글 정보를 재구성 
+        // const mainPosts = [...state.mainPosts]
+        // mainPosts[postIndex] = { ...post, Comments };
+        // return {
+        //     ...state,
+        //     mainPosts,
+        //     addCommentLoading: false,
+        //     addCommentDone: true,
+        // };
+        // 댓글이 달릴 포스팅 객체 찾기
+        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+        post.Comments.unshift(dummyComment(action.data.content));
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
       case ADD_COMMENT_FAILURE:
-          // return {
-          //     ...state,
-          //     addCommentLoading: false,
-          //     addCommentError: action.error,
-          // };
-          draft.addCommentLoading = false;
-          draft.addCommentError = action.error;
-          break;
+        // return {
+        //     ...state,
+        //     addCommentLoading: false,
+        //     addCommentError: action.error,
+        // };
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
 
       default:
         return state;
