@@ -1,3 +1,4 @@
+
 export const initialState = {
     // isLoggedIn: false,
     // signUpData: {},
@@ -33,6 +34,11 @@ export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME'
+
+
+
 // const reducer = (state = initialState, action) => {
 //     switch (action.type) {
 //         case "LOG_IN":
@@ -52,6 +58,15 @@ export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 //     }
 // };
 
+const dummyUser = (data) => ({
+    ...data,
+    nickname: '제로초',
+    id: 1,
+    Posts: [{ id: 1 }],
+    Followings: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
+    Followers: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
+});
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case LOG_IN_REQUEST:
@@ -66,7 +81,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 logInLoading: false,
                 logInDone: true,
-                me: action.data,
+                me: dummyUser(action.data)
             };
         case LOG_IN_FAILURE:
             return {
@@ -94,6 +109,25 @@ const reducer = (state = initialState, action) => {
                 logOutLoading: false,
                 logouterror: action.error,
             };
+
+        case ADD_POST_TO_ME:
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: [{ id: action.data }, ...state.me.Posts],
+                },
+            };
+
+            case REMOVE_POST_OF_ME:
+                return {
+                  ...state,
+                  me: {
+                    ...state.me,
+                    Posts: state.me.Posts.filter((v) => v.id !== action.data),
+                  },
+                };
+
         default:
             return state;
     }

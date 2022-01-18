@@ -2,23 +2,25 @@ import React, { useState, useCallback } from "react";
 import { Card, Avatar, List, Comment, Popover, Button } from 'antd';
 // import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { RetweetOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import CommentForm from './CommentForm';
 import MultiImages from "./MultiImages";
 import OneTwoImages from "./OneTwoImages";
 import PostCardContent from "../components/PostCardContent";
+import { REMOVE_POST_REQUEST } from '../reducers/post';
 
 
 
 const PostCard = ({ post }) => {
-  // console.log("post(PostCard) : ", post);
+  const dispatch = useDispatch();
+  const { removePostLoading } = useSelector((state) => state.post);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const [liked, setLiked] = useState(false);
 
   const { me } = useSelector((state) => state.user);
   const id = me && me.id;
-  
+
   const onToggleLike = useCallback(() => {
     setLiked((prev) => !prev);
   }, []);
@@ -27,6 +29,15 @@ const PostCard = ({ post }) => {
     setCommentFormOpened((prev) => !prev);
   }, []);
 
+  const onRemovePost = useCallback(() => {
+    // console.log("삭제할 post id : ", post.id);
+
+    dispatch({
+      type: REMOVE_POST_REQUEST,
+      data: post.id,
+    });
+
+  }, []);
 
   return (
     <>
@@ -35,7 +46,7 @@ const PostCard = ({ post }) => {
         bodyStyle={{}}
         bordered={true}
         cover={
-          post.Images.length <= 2 ? (
+          post.Images.length <= 2 &  post.Images.length != 0 ? (
             <OneTwoImages images={post.Images} />
           ) : <MultiImages images={post.Images} />
 
@@ -48,26 +59,26 @@ const PostCard = ({ post }) => {
             : <HeartOutlined key="heart" onClick={onToggleLike} />,
           <MessageOutlined key="message" onClick={onToggleComment} />,
           <Popover
-          key="ellipsis"
-          content={(
+            key="ellipsis"
+            content={(
               <Button.Group>
-                  {id && post.User.nickname === id
-                      ? (
-                          <>
-                              <Button>수정</Button>
-                              <Button type="danger">삭제</Button>
-                          </>
-                      )
-                      : <Button>신고</Button>}
+                {id && post.User.id === id
+                  ? (
+                    <>
+                      <Button>수정</Button>
+                      <Button type="danger" loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
+                    </>
+                  )
+                  : <Button>신고</Button>}
               </Button.Group>
-          )}
-      >
-          <EllipsisOutlined />
-      </Popover>,        ]}
+            )}
+          >
+            <EllipsisOutlined />
+          </Popover>,]}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          // description={post.content}
+          description={<PostCardContent postData={post.content} />}
         />
       </Card>
 

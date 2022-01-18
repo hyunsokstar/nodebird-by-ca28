@@ -7,13 +7,14 @@ import PostCard from "../components/PostCard";
 
 const Home = () => {
     const { mainPosts } = useSelector(state => state.post);
-﻿
+    const { me } = useSelector((state) => state.user);
+
     return (
         <AppLayout>
             <Head>
                 <title>Home</title>
             </Head>
-            <PostForm />
+            {me && <PostForm />}
             {mainPosts.map((c) => {
                 return (
                     <PostCard key={c.id} post={c} />

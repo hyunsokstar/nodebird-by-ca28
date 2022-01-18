@@ -6,18 +6,17 @@ import {
   LoginButtonWrapper,
   LoginButton,
 } from "./style/LoginFormStyle";
-
-// 추가
 import { useDispatch, useSelector } from 'react-redux';
 import { LOG_IN_REQUEST } from '../reducers/user';
 
-// 수정
-// const LoginForm = ({ setIsLoggedIn }) => {
+import useInput from '../hooks/useInput';
+
+
 const LoginForm = () => {
-  // 추가
   const dispatch = useDispatch();
 
-  const [id, setId] = useState("");
+  // const [id, setId] = useState("");
+  const [email, onChangeEmail] = useInput('');
   const [password, setPassword] = useState("");
   const { logInLoading } = useSelector((state) => state.user);
 
@@ -31,25 +30,28 @@ const LoginForm = () => {
   }, []);
 
   const onSubmitForm = useCallback(() => {
-    console.log("id,password : ", id, password);
-    // 수정
-    // setIsLoggedIn(true);
-    // dispatch(loginAction({ id, password }));
+    // console.log("id,password : ", id, password);
+    console.log(email, password);
+
 
     dispatch({
       type: LOG_IN_REQUEST,
-      data: { id, password },
+      // data: { id, password },
+      data: { email, password },
     });
 
-  }, [id, password]);
+  // }, [id, password]);
+  }, [email, password]);
 
   return (
     <LoginFormWrapper>
       <Form onFinish={onSubmitForm}>
         <div>
-          <label htmlFor="user-id">아이디</label>
+          {/* <label htmlFor="user-id">아이디</label> */}
+          <label htmlFor="user-email">이메일</label>
           <br />
-          <Input name="user-id" value={id} onChange={onChangeId} required />
+          {/* <Input name="user-id" value={id} onChange={onChangeId} required /> */}
+          <Input name="user-id" type="email" value={email} onChange={onChangeEmail} required />
         </div>
         <div>
           <label htmlFor="user-password">비밀번호</label>

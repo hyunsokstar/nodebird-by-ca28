@@ -9,6 +9,7 @@ import {
     LOG_OUT_FAILURE
 } from '../reducers/user';
 
+
 function logInAPI(data) {
     return axios.post('/api/login', data);
 }
@@ -20,7 +21,7 @@ function* logIn(action) {
         yield delay(2000);
         yield put({
             type: LOG_IN_SUCCESS,
-            data: { ...action.data, nickname: "hyun" },
+            data: action.data,
         });
     } catch (err) {
         console.error(err);
