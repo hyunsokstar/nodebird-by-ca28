@@ -1,24 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
+
+import { useSelector } from 'react-redux';
+import Router from 'next/router';
+
 import NicknameEditForm from "../components/NicknameEditForm";
 import profile_style from "./styles/Profile.module.css";
 import FollowList from "../components/FollowList";
 
-// 팔로잉(내가 팔로잉 하는 사람)
-const followingList = [
-  { nickname: "제로초" },
-  { nickname: "장기효" },
-  { nickname: "k덕배" },
-];
-// 팔로워(나를 팔로잉 하는 사람)
-const followerList = [
-  { nickname: "철수" },
-  { nickname: "호빵맨" },
-  { nickname: "이순신" },
-];
+// // 팔로잉(내가 팔로잉 하는 사람)
+// const followingList = [
+//   { nickname: "제로초" },
+//   { nickname: "장기효" },
+//   { nickname: "k덕배" },
+// ];
+// // 팔로워(나를 팔로잉 하는 사람)
+// const followerList = [
+//   { nickname: "철수" },
+//   { nickname: "호빵맨" },
+//   { nickname: "이순신" },
+// ];
 
 const Profile = () => {
+
+  const { me } = useSelector((state) => state.user);
+  console.log("me(profile page) : ", me);
+
+  // 로그인 안한 상태면 기본 페이지로 이동
+  useEffect(() => {
+    if (!(me && me.id)) {
+      Router.push('/');
+    }
+  }, [me && me.id]);
+  if (!me) {
+    return null;
+  }
+
+
   return (
     <>
       <Head>
@@ -28,8 +47,8 @@ const Profile = () => {
         <div className={profile_style.searchInput}>
           <NicknameEditForm />
         </div>
-        <FollowList header="팔로잉 목록" data={followingList} />
-        <FollowList header="팔로워 목록" data={followerList} />
+        <FollowList header="팔로잉 목록" data={me.Followings} />
+        <FollowList header="팔로워 목록" data={me.Followers} />
       </AppLayout>
     </>
   );
