@@ -1,3 +1,6 @@
+import shortId from 'shortid';
+
+
 export const initialState = {
   mainPosts: [
     {
@@ -46,23 +49,29 @@ export const initialState = {
   addPostDone: false,
   addPostError: null,
 
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
+
 };
 
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
 export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-// const dummyPost = {
-//   id: 2,
-//   content: 'hello world #posting_test',
-//   User: {
-//     id: 1,
-//     nickname: '제로초',
-//   },
-//   Images: [{ src: "https://image.shutterstock.com/image-photo/odaiba-japan-10-january-2016-600w-687132658.jpg" }],
-//   Comments: [],
-// };
+
+const dummyComment = (data) => ({
+  id: shortId.generate(),
+  content: data,
+  User: {
+      id: 1,
+      nickname: "제로초",
+  },
+});
 
 const dummyPost = (data) => ({
   id: data.id,
@@ -142,6 +151,34 @@ const reducer = (state = initialState, action) => {
         removePostLoading: false,
         removePostError: action.error,
       };
+
+      case ADD_COMMENT_REQUEST:
+        return {
+            ...state,
+            addCommentLoading: true,
+            addCommentDone: false,
+            addCommentError: null,
+        };
+    case ADD_COMMENT_SUCCESS:
+        const mainPosts = [...state.mainPosts]
+        const postIndex = state.mainPosts.findIndex(
+            (v) => v.id === action.data.postId
+        );
+        const post = { ...state.mainPosts[postIndex] };
+        const Comments = [...post.Comments,dummyComment(action.data.content),];
+        mainPosts[postIndex] = { ...post, Comments };
+        return {
+            ...state,
+            mainPosts,
+            addCommentLoading: false,
+            addCommentDone: true,
+        };
+    case ADD_COMMENT_FAILURE:
+        return {
+            ...state,
+            addCommentLoading: false,
+            addCommentError: action.error,
+        };
 
     default:
       return state;

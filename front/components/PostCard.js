@@ -46,7 +46,7 @@ const PostCard = ({ post }) => {
         bodyStyle={{}}
         bordered={true}
         cover={
-          post.Images.length <= 2 &  post.Images.length != 0 ? (
+          post.Images.length <= 2 & post.Images.length != 0 ? (
             <OneTwoImages images={post.Images} />
           ) : <MultiImages images={post.Images} />
 
@@ -84,7 +84,7 @@ const PostCard = ({ post }) => {
 
       {commentFormOpened && (
         <>
-          <CommentForm />
+          <CommentForm post={post} />
           {/* 추가 */}
           <List
             header={`${post.Comments ? post.Comments.length : 0} 댓글`}
